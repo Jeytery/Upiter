@@ -6,12 +6,12 @@ public protocol Archivable {
 }
 
 public extension Archivable where Self: Codable {
-    func archive() -> Data? {
+    public func archive() -> Data? {
         guard let json = try? JSONEncoder().encode(self) else { return nil }
         return Data(json)
     }
     
-    static func unarchive(data: Data) -> Self? {
+    public static func unarchive(data: Data) -> Self? {
         return try? JSONDecoder().decode(Self.self, from: data)
     }
 }
@@ -21,7 +21,7 @@ public protocol Jsonable {
 }
 
 public extension Jsonable where Self: Encodable {
-    var json: String {
+    public var json: String {
         let jsonData = try! JSONEncoder().encode(self)
         let jsonString = String(data: jsonData, encoding: .utf8)!
         return jsonString
@@ -29,11 +29,11 @@ public extension Jsonable where Self: Encodable {
 }
 
 public protocol Dictionarable {
-    var dictionary: [String: Any]? { get }
+    public var dictionary: [String: Any]? { get }
 }
 
 public extension Dictionarable where Self: Encodable {
-    var dictionary: [String: Any]? {
+    public var dictionary: [String: Any]? {
         guard let jsonData = try? JSONEncoder().encode(self) else {
             return nil
         }
@@ -45,12 +45,12 @@ public extension Dictionarable where Self: Encodable {
 }
 
 public extension Array where Element: Codable {
-    func archive() -> Data? {
+    public func archive() -> Data? {
         guard let json = try? JSONEncoder().encode(self) else { return nil }
         return Data(json)
     }
     
-    static func unarchive(data: Data) -> Self? {
+    public static func unarchive(data: Data) -> Self? {
         return try? JSONDecoder().decode(Self.self, from: data)
     }
 }
