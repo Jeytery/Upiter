@@ -1,6 +1,6 @@
 import Foundation
 
-protocol Archivable {
+public protocol Archivable {
     func archive() -> Data?
     static func unarchive(data: Data) -> Self?
 }
@@ -16,7 +16,7 @@ extension Archivable where Self: Codable {
     }
 }
 
-protocol Jsonable {
+public protocol Jsonable {
     var json: String { get }
 }
 
@@ -28,7 +28,7 @@ extension Jsonable where Self: Encodable {
     }
 }
 
-protocol Dictionarable {
+public protocol Dictionarable {
     var dictionary: [String: Any]? { get }
 }
 
@@ -41,5 +41,16 @@ extension Dictionarable where Self: Encodable {
             return nil
         }
         return dict as? [String: Any]
+    }
+}
+
+extension Array where Element: Codable {
+    func archive() -> Data? {
+        guard let json = try? JSONEncoder().encode(self) else { return nil }
+        return Data(json)
+    }
+    
+    static func unarchive(data: Data) -> Self? {
+        return try? JSONDecoder().decode(Self.self, from: data)
     }
 }
